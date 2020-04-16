@@ -1,0 +1,10 @@
+version: '1.0'
+stages:
+  - stage1
+steps:
+  logs_bombarding:
+    stage: stage1
+    title: free style step
+    image: alpine
+    commands:
+     - echo "hello, world!"

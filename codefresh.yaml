@@ -9,7 +9,7 @@ steps:
     image: alpine
     commands:
      - echo "hello, world!"
-   ${{STEP_NAME}}:
+  ${{STEP_NAME}}:
     stage: stage2
     title: ${{STEP_NAME}}
     image: alpine

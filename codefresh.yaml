@@ -22,3 +22,7 @@ steps:
          - DATA=world
     commands:
      - echo $DATA
+  step3:
+    stage: stage2
+    title: custom step
+    type: xyz

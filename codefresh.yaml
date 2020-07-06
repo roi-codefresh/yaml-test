@@ -1,7 +1,7 @@
 version: '1.0'
 stages:
   - stage1
-  - stage2
+  - launch
 steps:
   logs_bombarding:
     stage: stage1
@@ -9,16 +9,16 @@ steps:
     image: alpine
     commands:
      - echo "hello, world!"
-  step2:
-    stage: stage2
-    title: ${{STEP_NAME}}
-    image: alpine
-    scale:
-      scale1:
-        environment:
-         - DATA=hello
-      scale2:
-        environment:
-         - DATA=world
-    commands:
-     - echo $DATA
+     
+  launch_composition:
+    title: Launch Composition
+    type: launch-composition
+    composition:
+      version: '2'
+      services:
+        app:
+          image: nginx:latest
+          ports:
+          - 80
+    environment_name: 'cf-nginx'
+    stage: launch 

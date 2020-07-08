@@ -9,16 +9,3 @@ steps:
     image: alpine
     commands:
      - echo "hello, world!"
-     
-  launch_composition:
-    title: Launch Composition
-    type: launch-composition
-    composition:
-      version: '2'
-      services:
-        app:
-          image: nginx:latest
-          ports:
-          - 80
-    environment_name: 'cf-nginx'
-    stage: launch 

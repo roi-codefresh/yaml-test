@@ -9,3 +9,58 @@ steps:
     image: alpine
     commands:
      - echo "hello, world!"
+  test_matrix:
+    stage: tests
+    title: Running Knapsack Matrix
+    image: ubuntu
+    environment:
+    - CI=true
+    - CI_NODE_TOTAL=16
+    - BUILD_ID=${{CF_BUILD_ID}}
+    - DB_HOST=postgres
+    - DB_USER=postgres
+    - DB_PASS=password
+    - DB_NAME=athena
+    - RAILS_ENV=test
+    - REDIS_URL=redis://redis:6379/0
+    - KNAPSACK_GENERATE_REPORT=true
+    - ALLURE_RESULTS_DIR=${{CF_VOLUME_PATH}}/allure-results
+    matrix:
+      environment:
+      - CI_NODE_INDEX=0
+      - CI_NODE_INDEX=1
+    working_directory: /app
+    commands:
+    - echo "done"
+    services:
+      composition:
+        redis:
+          image: circleci/redis:4.0.9-alpine
+          ports:
+          - 6379
+        postgres:
+          # image: circleci/postgres:11-alpine-postgis-ram
+          image: mdillon/postgis:11-alpine
+          environment:
+          - POSTGRES_DB=athena_test
+          - POSTGRES_PASSWORD=password
+          - POSTGRES_USER=postgres
+          ports:
+          - 5432
+      readiness:
+        timeoutSeconds: 120
+        periodSeconds: 5
+        image: dustinvanbuskirk/wait-for-it
+        commands:
+        - /wait-for-it.sh -t 0 -h postgres -p 5432
+      setup:
+        image: alpine
+        environment:
+        - DB_HOST=postgres
+        - DB_USER=postgres
+        - DB_PASS=password
+        - DB_NAME=athena
+        - RAILS_ENV=test
+        - REDIS_URL=redis://redis:6379/0
+        commands:
+        - echo "==== Database Setup ===="

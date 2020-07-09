@@ -1,7 +1,7 @@
 version: '1.0'
 stages:
   - stage1
-  - launch
+  - tests
 steps:
   logs_bombarding:
     stage: stage1

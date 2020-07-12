@@ -10,26 +10,26 @@ stages:
   - "push"
 
 steps:
-#  clone:
-#    title: "Cloning repository"
-#    type: "git-clone"
-#    repo: "roi-codefresh/stresser"
-#    # CF_BRANCH value is auto set when pipeline is triggered
-#    # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
-#    revision: "${{CF_BRANCH}}"
-#    git: "github"
-#    stage: "clone"
-#
-#  build:
-#    title: "Building Docker image"
-#    type: "build"
-#    image_name: "roi-codefresh/stresser"
-#    working_directory: "${{clone}}"
-#    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-#    dockerfile: "Dockerfile"
-#    registry: dockerhub
-#    disable_push: true
-#    stage: "build"
+  clone:
+    title: "Cloning repository"
+    type: "git-clone"
+    repo: "roi-codefresh/stresser"
+    # CF_BRANCH value is auto set when pipeline is triggered
+    # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
+    revision: "${{CF_BRANCH}}"
+    git: "github"
+    stage: "clone"
+
+  build:
+    title: "Building Docker image"
+    type: "build"
+    image_name: "roi-codefresh/stresser"
+    working_directory: "${{clone}}"
+    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+    dockerfile: "Dockerfile"
+    registry: dockerhub
+    disable_push: true
+    stage: "build"
 
   test:
     title: "Running test"
@@ -40,12 +40,12 @@ steps:
       - "ls"
     stage: "test"
     
-#  push_step:
-#   type: push
-#   title: Push
-#   stage: "push"
-#   candidate: ${{build}}
-#   tag: latest
-#   image_name: roicodefresh/stresser
-#   registry: dockerhub
+  push_step:
+   type: push
+   title: Push
+   stage: "push"
+   candidate: ${{build}}
+   tag: latest
+   image_name: roicodefresh/stresser
+   registry: dockerhub
 

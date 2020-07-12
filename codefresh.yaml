@@ -1,66 +1,51 @@
-version: '1.0'
+# More examples of Codefresh YAML can be found at
+# https://codefresh.io/docs/docs/yaml-examples/examples/
+
+version: "1.0"
+# Stages can help you organize your steps in stages
 stages:
-  - stage1
-  - tests
+  - "clone"
+  - "build"
+  - "test"
+  - "push"
+
 steps:
-  logs_bombarding:
-    stage: stage1
-    title: free style step
-    image: alpine
+  clone:
+    title: "Cloning repository"
+    type: "git-clone"
+    repo: "roi-codefresh/stresser"
+    # CF_BRANCH value is auto set when pipeline is triggered
+    # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
+    revision: "${{CF_BRANCH}}"
+    git: "github"
+    stage: "clone"
+
+  build:
+    title: "Building Docker image"
+    type: "build"
+    image_name: "roi-codefresh/stresser"
+    working_directory: "${{clone}}"
+    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+    dockerfile: "Dockerfile"
+    registry: dockerhub
+    disable_push: true
+    stage: "build"
+
+  test:
+    title: "Running test"
+    type: "freestyle" # Run any command
+    image: "ubuntu:latest" # The image in which command will be executed
+    working_directory: "${{clone}}" # Running command where code cloned
     commands:
-     - echo "hello, world!"
-  test_matrix:
-    stage: tests
-    title: Running Knapsack Matrix
-    image: ubuntu
-    environment:
-    - CI=true
-    - CI_NODE_TOTAL=16
-    - BUILD_ID=${{CF_BUILD_ID}}
-    - DB_HOST=postgres
-    - DB_USER=postgres
-    - DB_PASS=password
-    - DB_NAME=athena
-    - RAILS_ENV=test
-    - REDIS_URL=redis://redis:6379/0
-    - KNAPSACK_GENERATE_REPORT=true
-    - ALLURE_RESULTS_DIR=${{CF_VOLUME_PATH}}/allure-results
-    matrix:
-      environment:
-      - CI_NODE_INDEX=0
-      - CI_NODE_INDEX=1
-    working_directory: /app
-    commands:
-    - echo "done"
-    services:
-      composition:
-        redis:
-          image: circleci/redis:4.0.9-alpine
-          ports:
-          - 6379
-        postgres:
-          # image: circleci/postgres:11-alpine-postgis-ram
-          image: mdillon/postgis:11-alpine
-          environment:
-          - POSTGRES_DB=athena_test
-          - POSTGRES_PASSWORD=password
-          - POSTGRES_USER=postgres
-          ports:
-          - 5432
-      readiness:
-        timeoutSeconds: 120
-        periodSeconds: 5
-        image: dustinvanbuskirk/wait-for-it
-        commands:
-        - /wait-for-it.sh -t 0 -h postgres -p 5432
-      setup:
-        image: alpine
-        environment:
-        - DB_HOST=postgres
-        - DB_USER=postgres
-        - DB_PASS=password
-        - DB_NAME=athena
-        - RAILS_ENV=test
-        - REDIS_URL=redis://redis:6379/0
-        commands:
-        - echo "==== Database Setup ===="
+      - "ls"
+    stage: "test"
+    
+  push_step:
+   type: push
+   title: Push
+   stage: "push"
+   candidate: ${{build}}
+   tag: latest
+   image_name: roicodefresh/stresser
+   registry: dockerhub
+

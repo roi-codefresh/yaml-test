@@ -13,12 +13,15 @@ steps:
   clone:
     title: "Cloning repository"
     type: "git-clone"
-    repo: "roi-codefresh/stresser"
+    repo: "https://github.com/roi-codefresh/stresser"
     # CF_BRANCH value is auto set when pipeline is triggered
     # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
     revision: "${{CF_BRANCH}}"
     git: "github"
     stage: "clone"
+    credentials:
+      username: github
+      password: '${{GITHUB_PASSWORD}}'
 
   build:
     title: "Building Docker image"

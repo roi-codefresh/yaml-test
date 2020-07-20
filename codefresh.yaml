@@ -20,7 +20,7 @@ steps:
     stage: "clone"
     credentials:
       username: github
-      password: '${{secrets.ci.github_token}}'
+      password: '${{GITHUB_TOKEN}}'
 
   build:
     title: "Building Docker image"

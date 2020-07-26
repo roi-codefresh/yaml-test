@@ -41,12 +41,3 @@ steps:
       - "ls"
     stage: "test"
     
-  push_step:
-   type: push
-   title: Push
-   stage: "push"
-   candidate: ${{build}}
-   tag: latest
-   image_name: roicodefresh/stresser
-   registry: dockerhub
-

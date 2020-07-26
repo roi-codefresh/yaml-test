@@ -29,7 +29,6 @@ steps:
     working_directory: "${{clone}}"
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     dockerfile: "Dockerfile"
-    registry: dockerhub
     disable_push: true
     stage: "build"
 

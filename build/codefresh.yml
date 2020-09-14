@@ -37,6 +37,7 @@ steps:
     type: "build"
     image_name: "roi-codefresh/stresser"
     working_directory: "${{clone}}"
+    tag: latest
     dockerfile: "Dockerfile"
     registry: dockerhub
     disable_push: true

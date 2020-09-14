@@ -28,6 +28,8 @@ steps:
       - "echo message: ${CF_COMMIT_MESSAGE}"
       - "echo author: ${CF_COMMIT_AUTHOR}"
       - "echo branch: ${CF_BRANCH}"
+      - "echo secret: ${{TOKEN}}"
+      - "echo ${{secrets.github-token.host}}"
     stage: "clone"
 
   build:
@@ -35,7 +37,6 @@ steps:
     type: "build"
     image_name: "roi-codefresh/stresser"
     working_directory: "${{clone}}"
-    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     dockerfile: "Dockerfile"
     registry: dockerhub
     disable_push: true

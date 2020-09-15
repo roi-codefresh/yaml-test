@@ -29,7 +29,10 @@ steps:
       - "echo author: ${CF_COMMIT_AUTHOR}"
       - "echo branch: ${CF_BRANCH}"
       - "echo secret: ${{TOKEN}}"
-      - "echo ${{secrets.github-token.host}}"
+      - "echo ${{secrets.github-token.token}}"
+      - "echo ${{secrets.k8s-git-host.host}}"
+      - "echo ${{secrets.git-host.host}}"
+      - "echo ${{secrets.git-token.token}}"
     stage: "clone"
 
   build:

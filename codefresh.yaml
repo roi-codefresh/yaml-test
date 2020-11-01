@@ -13,7 +13,7 @@ steps:
     type: "git-clone"
     repo: "roi-codefresh/stresser"
     stage: "clone"
-    context: github-bf
+    git: github-bf
 
   test:
     title: "Running test"

@@ -1,5 +1,5 @@
 # More examples of Codefresh YAML can be found at
-# https://codefresh.io/docs/docs/yaml-examples/examples/
+# https://codefresh.io/docs/docs/yaml-examples/examples/asdasd
 
 version: "1.0"
 # Stages can help you organize your steps in stages bla 1234
